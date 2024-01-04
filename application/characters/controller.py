@@ -19,6 +19,7 @@ def index_movesets():
         raise exceptions.InternalServerError(f"Work-in-Progress")
 
 
+
 def show(name):
     print('name', type(name))
     character = Character.query.filter_by(name=name).first()
@@ -27,6 +28,7 @@ def show(name):
         return jsonify({f'ssf2-fighter[{name}]': character.json}), 200
     except:
         raise exceptions.NotFound(f"Character name not found in DB")
+
 
 
 def create():
@@ -70,8 +72,22 @@ def update(id):
     db.session.commit()
     return jsonify({ f'updating ssf2-fighter[{char_name}]': character.json})
 
+def update_moveset(id):
+    data = request.json
+    moveset_to_update = Moveset.query.filter_by(id=id).first()
+    for attribute, value in data.items():
+        if hasattr(moveset_to_update, attribute):
+            setattr(moveset_to_update, attribute, value)
+
+    db.session.commit()
+    return jsonify({ f'updating ssf2-moveset[{id}]': moveset_to_update.json})
+
+
+
 def destroy(id):
     character = Character.query.filter_by(id=id).first()
     db.session.delete(character)
     db.session.commit()
     return 'Character deleted', 204
+
+

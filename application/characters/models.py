@@ -13,7 +13,7 @@ class Character(db.Model):
     height = db.Column(db.Integer, nullable=False)
     weight = db.Column(db.Integer, nullable=True)
 
-    movesets = db.relationship('Moveset', backref="character", lazy=True)
+    movesets = db.relationship('Moveset', backref="character", lazy=True, order_by='Moveset.id')
 
     def __init__(self, alignment, name, species, birthplace, height, movesets=None, weight=None):
         self.alignment = alignment
