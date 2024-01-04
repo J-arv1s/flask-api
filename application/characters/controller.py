@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from werkzeug import exceptions
-from .models import Character
+from .models import Character, Moveset
 
 from .. import db
 
@@ -10,7 +10,15 @@ def index():
         return jsonify({ "ssf2-fighters": [c.json for c in characters] }), 200
     except:
         raise exceptions.InternalServerError(f"Work-in-Progress")
-    
+
+def index_movesets():
+    movesets = Moveset.query.order_by(Moveset.id).all()
+    try:
+        return jsonify({ "ssf2-all-movesets": [m.json for m in movesets] }), 200
+    except:
+        raise exceptions.InternalServerError(f"Work-in-Progress")
+
+
 def show(name):
     print('name', type(name))
     character = Character.query.filter_by(name=name).first()
@@ -19,7 +27,8 @@ def show(name):
         return jsonify({f'ssf2-fighter[{name}]': character.json}), 200
     except:
         raise exceptions.NotFound(f"Character name not found in DB")
-    
+
+
 def create():
     try:
         alignment, name, species, birthplace, height, movesets, weight = request.json.values()
@@ -32,6 +41,23 @@ def create():
         return jsonify({ "new ssf2-fighter": new_character.json }), 201
     except:
         raise exceptions.BadRequest(f"Cannot process request")
+
+def create_moveset():
+    try: 
+        move_type, move_name, character_id = request.json.values()
+        character = Character.query.filter_by(id=character_id).first()
+        if not character:
+            raise exceptions.NotFound(f"Character not found in DB")
+
+        new_moveset = Moveset(move_type, move_name, character_id)
+        character.movesets.append(new_moveset)
+        db.session.commit()
+        return jsonify({ "new ssf2-moveset": new_moveset.json }), 201
+        
+    except:
+        raise exceptions.BadRequest(f"Cannot process request")
+
+
 
 def update(id):
     data = request.json

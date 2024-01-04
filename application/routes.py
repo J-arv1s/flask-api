@@ -9,8 +9,10 @@ def welcome():
         "endpoints": [
             "GET /",
             "GET /characters",
+            "GET /movesets",
             "GET /characters/<string:name>",
-            "POST /characters/",
+            "POST /characters",
+            "POST /movesets",
             "PATCH /characters/<int:id>",
             "DELETE /characters/<int:id>"
         ]

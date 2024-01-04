@@ -49,10 +49,16 @@ class Moveset(db.Model):
     move_name = db.Column(db.String(100), nullable=False)
     character_id = db.Column(db.Integer, db.ForeignKey('ssf2-characters.id'), nullable=False)
 
+    def __init__(self, move_type, move_name, character_id):
+        self.move_type = move_type
+        self.move_name = move_name
+        self.character_id = character_id
+
     @property
     def json(self):
         return {
             "id": self.id,
             "move_type": self.move_type,
             "move_name": self.move_name,
+            "character_ref": self.character_id
         }

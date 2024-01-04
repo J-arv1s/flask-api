@@ -1,5 +1,5 @@
 from application import app # app from __init__.py
-from .controller import index, show, create, update, destroy
+from .controller import index, show, create, update, destroy, index_movesets, create_moveset
 
 from flask import request
 from werkzeug import exceptions
@@ -22,6 +22,23 @@ def handle_character_ID(id):
     if request.method == 'PATCH': return update(id)
     
     if request.method == 'DELETE': return destroy(id)
+
+
+
+## COMBINING REQUEST METHODS for /movesets
+@app.route('/movesets', methods=["GET", "POST"])
+def handle_movesets():
+    if request.method == "GET": return index_movesets()
+
+    if request.method == "POST": return create_moveset()
+
+## COMBINING REQUEST METHODS for /movesets/id
+@app.route('/characters/<int:id>', methods=['PATCH', 'DELETE'])
+def handle_character_ID(id):
+    # if request.method == 'PATCH': return update_moveset(id)
+    
+    # if request.method == 'DELETE': return destroy_moveset(id)
+    pass
 
 
 
