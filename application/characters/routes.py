@@ -1,5 +1,5 @@
 from application import app # app from __init__.py
-from .controller import index, show, create, update, destroy, index_movesets, create_moveset, update_moveset
+from .controller import index, show, create, update, destroy, index_movesets, create_moveset, update_moveset, destroy_moveset
 
 from flask import request
 from werkzeug import exceptions
@@ -36,8 +36,8 @@ def handle_movesets():
 @app.route('/movesets/<int:id>', methods=['PATCH', 'DELETE'])
 def handle_moveset_ID(id):
     if request.method == 'PATCH': return update_moveset(id)
-    
-    # if request.method == 'DELETE': return destroy_moveset(id)
+
+    if request.method == 'DELETE': return destroy_moveset(id)
 
 
 

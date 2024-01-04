@@ -90,4 +90,8 @@ def destroy(id):
     db.session.commit()
     return 'Character deleted', 204
 
-
+def destroy_moveset(id):
+    moveset_to_delete = Moveset.query.filter_by(id=id).first()
+    db.session.delete(moveset_to_delete)
+    db.session.commit()
+    return 'Moveset deleted', 204
